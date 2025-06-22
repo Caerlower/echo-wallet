@@ -1,0 +1,43 @@
+{
+  "name": "echo-wallet",
+  "version": "1.0.0",
+  "description": "AI-powered Telegram wallet assistant for Base blockchain using Nodit Web3 Data API",
+  "main": "bot/index.js",
+  "scripts": {
+    "start": "node bot/index.js",
+    "dev": "nodemon bot/index.js",
+    "setup": "node setup.js",
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Caerlower/echo-wallet.git"
+  },
+  "keywords": [
+    "telegram-bot",
+    "web3",
+    "blockchain",
+    "wallet",
+    "base-chain",
+    "nodit",
+    "ai-assistant"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Caerlower/echo-wallet/issues"
+  },
+  "homepage": "https://github.com/Caerlower/echo-wallet#readme",
+  "dependencies": {
+    "axios": "^1.10.0",
+    "dotenv": "^16.5.0",
+    "node-telegram-bot-api": "^0.66.0",
+    "web3": "^4.16.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
