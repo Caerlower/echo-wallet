@@ -91,8 +91,8 @@ npm start
 
 1.  **Start a conversation:** Find your bot on Telegram and send `/start`.
 2.  **Query a wallet:** Send any wallet address or ENS name to the bot.
-    -   `0x750094b9263860508f2b4cf3eaa867f344167f1e`
-    -   `caerlower.eth`
+    -   `0xADaF6AF3a268A7E42A7f4d2a561d0A5E6eC7B726`
+    -   `manav.eth`
 3.  **Use Interactive Buttons:** After receiving the initial analysis, use the buttons to:
     -   **Transaction History:** View the last 10 transactions in detail.
     -   **Detailed Insights:** Refresh the main insights view.
@@ -101,7 +101,7 @@ npm start
     ```
     /search <wallet_address> <your_query>
     ```
-    *Example:* `/search 0x750094b9263860508f2b4cf3eaa867f1e sent USDC`
+    *Example:* `/search 0xADaF6AF3a268A7E42A7f4d2a561d0A5E6eC7B726 sent USDC`
 
 ---
 
