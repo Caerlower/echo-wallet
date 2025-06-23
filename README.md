@@ -2,7 +2,8 @@
 
 EchoWallet is an intelligent Telegram bot designed to provide instant, comprehensive insights into any wallet on the **Base blockchain**. Powered by the **Nodit Web3 Data API** and **Perplexity AI**, EchoWallet allows users to fetch transaction histories, view detailed portfolio breakdowns, and receive AI-driven analysis of wallet activity, all within a simple conversational interface.
 
-![EchoWallet Demo](https://i.imgur.com/example.png) <!-- Replace with a real screenshot -->
+![image](https://github.com/user-attachments/assets/85777b0b-0266-482f-8c79-ad04c8b00986)
+<img width="937" alt="Screenshot 2025-06-22 at 4 04 56 PM" src="https://github.com/user-attachments/assets/ad7de994-8db4-4702-b832-b1f2abd84580" />
 
 ---
 
