@@ -1,122 +1,214 @@
-# EchoWallet 🤖 AI-Powered Telegram Wallet Assistant
+# 🤖 EchoWallet - AI-Powered Blockchain Assistant
 
-EchoWallet is an intelligent Telegram bot designed to provide instant, comprehensive insights into any wallet on the **Base blockchain**. Powered by the **Nodit Web3 Data API** and **Perplexity AI**, EchoWallet allows users to fetch transaction histories, view detailed portfolio breakdowns, and receive AI-driven analysis of wallet activity, all within a simple conversational interface.
+EchoWallet is a comprehensive blockchain wallet assistant that provides detailed insights into wallets on the **Base blockchain**. It's available as both a **Telegram Bot** and a **Modern Web App**.
 
 ![image](https://github.com/user-attachments/assets/85777b0b-0266-482f-8c79-ad04c8b00986)
-<img width="937" alt="Screenshot 2025-06-22 at 4 04 56 PM" src="https://github.com/user-attachments/assets/ad7de994-8db4-4702-b832-b1f2abd84580" />
+<img width="937" alt="Screenshot 2025-06-22 at 4 04 56 PM" src="https://github.com/user-attachments/assets/ad7de994-8db4-4702-b832-b1f2abd84580" />
 
----
+## 📱 **Two Ways to Use EchoWallet**
 
-## ✨ Features
+### 🌐 **Web App** (Recommended)
+- **Modern chat-based interface**
+- **Wallet connection support**
+- **Real-time portfolio tracking**
+- **Beautiful, responsive UI**
+- **AI-powered insights**
 
--   **Comprehensive Wallet Insights:** Get a full overview of any wallet, including transaction counts, native ETH and token transfers, and net flow.
--   **Last 10 Transactions:** Instantly fetch the last 10 transactions (both native ETH and ERC-20 tokens), complete with values, direction, and direct links to BaseScan.
--   **Detailed Portfolio Analysis:** View a complete portfolio breakdown, including the total USD value and a list of all held assets, with prices powered exclusively by Nodit's Data API.
--   **AI-Powered Analysis:** Leverage the power of Perplexity AI to receive a human-readable analysis of a wallet's activity, including patterns, risk assessment, and actionable suggestions.
--   **ENS Name Resolution:** Simply provide an ENS name (e.g., `vitalik.eth`) and EchoWallet will automatically resolve it to the corresponding wallet address.
--   **Interactive Interface:** Use intuitive buttons to navigate through transaction history, get detailed insights, or request an AI analysis.
--   **Transaction Search:** Use the `/search` command to perform a simple keyword search on a wallet's recent transaction history.
+### 📱 **Telegram Bot**
+- **Simple chat interface**
+- **Quick wallet analysis**
+- **Portfolio overview**
+- **Transaction history**
 
----
+## 🚀 **Quick Start**
 
-## 🛠️ Technologies Used
+### **Web App** (New!)
+```bash
+# Navigate to web app
+cd webapp
 
--   **Backend:** Node.js
--   **Blockchain Data:** Nodit Web3 Data API
--   **AI Analysis:** Perplexity AI
--   **Telegram Integration:** `node-telegram-bot-api`
--   **Environment Management:** `dotenv`
+# Start backend
+cd backend && npm install && npm run dev
 
----
+# Start frontend (new terminal)
+cd frontend && npm install && npm run dev
 
-## 🚀 Getting Started
+# Open http://localhost:3000
+```
 
-Follow these instructions to get a local copy of EchoWallet up and running.
+### **Telegram Bot** (Legacy)
+```bash
+# Navigate to Telegram bot
+cd TelegramBot
 
-### Prerequisites
+# Install dependencies
+npm install
 
--   Node.js (v18.x or later)
--   npm
--   Git
+# Configure environment
+cp env.example .env
+# Add your API keys
 
-### Installation
-
-1.  **Clone the repository:**
-    ```sh
-    git clone https://github.com/your-username/echo-wallet.git
-    cd echo-wallet
-    ```
-
-2.  **Install dependencies:**
-    ```sh
-    npm install
-    ```
-
-3.  **Set up environment variables:**
-    Create a `.env` file in the root of the project by copying the example file:
-    ```sh
-    cp env.example .env
-    ```
-
-4.  **Configure your `.env` file:**
-    Open the `.env` file and add your API keys and configuration details:
-
-    ```env
-    # Telegram Bot Token from BotFather
-    TELEGRAM_TOKEN=YOUR_TELEGRAM_BOT_TOKEN
-
-    # Nodit API Key for Web3 data
-    NODIT_API_KEY=YOUR_NODIT_API_KEY
-
-    # (Optional) Perplexity API Key for AI analysis
-    PERPLEXITY_API_KEY=YOUR_PERPLEXITY_API_KEY
-
-    # Nodit RPC URL for the Base blockchain
-    BASE_RPC_URL=https://base-mainnet.nodit.io/YOUR_NODIT_API_KEY
-    ```
-
----
-
-## Usage
-
-### Running the Bot
-
-Once your `.env` file is configured, you can start the bot with:
-
-```sh
+# Start the bot
 npm start
 ```
 
-### How to Interact with the Bot
+## ✨ **Features**
 
-1.  **Start a conversation:** Find your bot on Telegram and send `/start`.
-2.  **Query a wallet:** Send any wallet address or ENS name to the bot.
-    -   `0xADaF6AF3a268A7E42A7f4d2a561d0A5E6eC7B726`
-    -   `manav.eth`
-3.  **Use Interactive Buttons:** After receiving the initial analysis, use the buttons to:
-    -   **Transaction History:** View the last 10 transactions in detail.
-    -   **Detailed Insights:** Refresh the main insights view.
-    -   **Get AI Analysis:** Receive a human-readable summary from Perplexity AI.
-4.  **Search Transactions:** Use the `/search` command to find specific transactions.
-    ```
-    /search <wallet_address> <your_query>
-    ```
-    *Example:* `/search 0xADaF6AF3a268A7E42A7f4d2a561d0A5E6eC7B726 sent USDC`
+### 🎯 **Core Capabilities**
+- **Portfolio Analysis**: Total USD values, asset breakdowns
+- **Transaction History**: Native ETH and token transfers
+- **ENS Resolution**: Support for ENS names
+- **AI-Powered Insights**: Intelligent wallet analysis
+- **Real-time Data**: Live blockchain data via Nodit APIs
+- **Search Functionality**: Find specific transactions
+
+### 🤖 **AI Integration**
+- **Perplexity AI**: Human-readable wallet analysis
+- **Pattern Recognition**: Activity patterns and risk assessment
+- **Conversational Interface**: Natural language queries
+- **Contextual Suggestions**: Smart recommendations
+
+### 🔗 **Blockchain Integration**
+- **Nodit APIs**: Comprehensive blockchain data
+- **Base Chain**: Full Base mainnet support
+- **Multi-Token**: ETH and ERC-20 tokens
+- **ENS Support**: Ethereum Name Service
+
+## 🏗️ **Architecture**
+
+### **Web App** (`/webapp`)
+```
+webapp/
+├── backend/          # Express.js API server
+│   ├── routes/       # API endpoints
+│   ├── services/     # Business logic
+│   └── server.js     # Main server
+└── frontend/         # Next.js React app
+    ├── components/   # React components
+    ├── pages/        # Next.js pages
+    └── styles/       # CSS and styling
+```
+
+### **Telegram Bot** (`/TelegramBot`)
+```
+TelegramBot/
+├── bot/             # Telegram bot logic
+├── services/        # API services
+└── index.js         # Bot entry point
+```
+
+## 🔧 **API Integration**
+
+### **Primary APIs**
+- **Nodit Data API**: Portfolio and transaction data
+- **Nodit Node RPC**: Direct blockchain interactions
+- **Perplexity AI**: Intelligent analysis
+- **ENS**: Address resolution
+
+### **No External Dependencies**
+- ✅ **Nodit Only**: All blockchain data from Nodit
+- ✅ **No CoinGecko**: Token prices from Nodit
+- ✅ **No Etherscan**: Transaction data from Nodit
+- ✅ **Self-Contained**: Minimal external dependencies
+
+## 📊 **What EchoWallet Provides**
+
+### **For Users**
+- **Portfolio Overview**: Total value and asset breakdown
+- **Transaction Monitoring**: Recent activity tracking
+- **AI Insights**: Intelligent wallet analysis
+- **Search Capabilities**: Find specific transactions
+- **ENS Support**: Easy address resolution
+
+### **For Developers**
+- **Clean Architecture**: Modular, maintainable code
+- **API-First Design**: RESTful endpoints
+- **Real-time Features**: WebSocket support
+- **Modern Stack**: React, Next.js, Express
+- **Comprehensive Documentation**: Detailed guides
+
+## 🎨 **User Experience**
+
+### **Web App Features**
+- **Modern UI**: Glass morphism design
+- **Responsive**: Works on all devices
+- **Real-time**: Live data updates
+- **Interactive**: Chat-based interface
+- **Wallet Connect**: Easy wallet integration
+
+### **Telegram Bot Features**
+- **Simple Commands**: Easy to use
+- **Quick Responses**: Fast data retrieval
+- **Portable**: Works anywhere Telegram is available
+- **No Installation**: Just start chatting
+
+## 🔒 **Security & Privacy**
+
+- **Read-Only Access**: No private key storage
+- **Secure APIs**: Rate limiting and validation
+- **CORS Protection**: Secure cross-origin requests
+- **Error Handling**: Graceful failure management
+- **Data Privacy**: Minimal data collection
+
+## 🚀 **Getting Started**
+
+### **Prerequisites**
+- Node.js 18+
+- Nodit API key
+- Perplexity AI key (optional)
+- MetaMask or compatible wallet (for web app)
+
+### **Environment Setup**
+```env
+# Required
+NODIT_API_KEY=your_nodit_api_key
+
+# Optional
+PERPLEXITY_API_KEY=your_perplexity_key
+TELEGRAM_BOT_TOKEN=your_telegram_token
+```
+
+## 📚 **Documentation**
+
+- **[Web App Guide](webapp/README.md)**: Complete web app documentation
+- **[API Reference](webapp/backend/README.md)**: Backend API documentation
+- **[Telegram Bot Guide](TelegramBot/README.md)**: Bot usage guide
+
+## 🤝 **Contributing**
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
+
+## 📄 **License**
+
+This project is licensed under the ISC License.
+
+## 🆘 **Support**
+
+- **Documentation**: Check the README files
+- **Issues**: Report bugs on GitHub
+- **Questions**: Open a discussion
+
+## 🔮 **Roadmap**
+
+### **Web App Enhancements**
+- [ ] WalletConnect v2 integration
+- [ ] Mobile app version
+- [ ] Advanced analytics dashboard
+- [ ] Multi-chain support
+- [ ] NFT tracking
+
+### **Bot Improvements**
+- [ ] More commands
+- [ ] Enhanced AI responses
+- [ ] Group chat support
+- [ ] Custom notifications
 
 ---
 
-## 🤝 Contributing
+**Built with ❤️ for the Base ecosystem**
 
-Contributions are welcome! If you have suggestions or want to improve the bot, feel free to fork the repo and submit a pull request.
-
-1.  Fork the Project
-2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4.  Push to the Branch (`git push origin feature/AmazingFeature`)
-5.  Open a Pull Request
-
----
-
-## 📄 License
-
-Distributed under the MIT License. See `LICENSE` for more information.
+*Choose your preferred interface and start exploring your wallet data with AI-powered insights!*
