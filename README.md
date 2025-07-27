@@ -2,9 +2,6 @@
 
 EchoWallet is a comprehensive blockchain wallet assistant that provides detailed insights into wallets on the **Base blockchain** with **real-time transaction monitoring and alerts**. It's available as both a **Telegram Bot** and a **Modern Web App**.
 
-![image](https://github.com/user-attachments/assets/85777b0b-0266-482f-8c79-ad04c8b00986)
-<img width="937" alt="Screenshot 2025-06-22 at 4 04 56 PM" src="https://github.com/user-attachments/assets/ad7de994-8db4-4702-b832-b1f2abd84580" />
-
 ## 🚨 **NEW: Real-Time Transaction Monitoring**
 
 EchoWallet now features **instant transaction monitoring** with Telegram alerts:
@@ -48,23 +45,6 @@ cd frontend && npm install && npm run dev
 # Open http://localhost:3000
 ```
 
-### **Real-Time Monitoring Setup**
-```bash
-# 1. Install ngrok for webhook endpoint
-npm install -g ngrok
-
-# 2. Start ngrok to expose your local server
-ngrok http 3001
-
-# 3. Update your .env file with the ngrok URL
-WEBHOOK_ENDPOINT=https://your-ngrok-url.ngrok.io/api/webhook/nodit
-
-# 4. Start monitoring a wallet
-curl -X POST "http://localhost:3001/api/webhook-monitoring/start/0xYOUR_WALLET_ADDRESS" \
-  -H "Content-Type: application/json" \
-  -d '{"chatId": "YOUR_TELEGRAM_CHAT_ID", "alerts": [{"type": "incoming_funds", "token": "USDC", "amount": "0.1"}]}'
-```
-
 ### **Telegram Bot** (Legacy)
 ```bash
 # Navigate to Telegram bot
@@ -91,7 +71,7 @@ npm start
 - **Real-time Data**: Live blockchain data via Nodit APIs
 - **Search Functionality**: Find specific transactions
 
-### 🚨 **Real-Time Monitoring** (NEW!)
+### 🚨 **Real-Time Monitoring**
 - **Webhook-Based Alerts**: Instant transaction notifications
 - **Custom Alert Rules**: Amount thresholds, token types, transaction directions
 - **Telegram Integration**: Direct notifications to your chat
@@ -220,15 +200,11 @@ NODIT_API_KEY=your_nodit_api_key
 # Optional
 PERPLEXITY_API_KEY=your_perplexity_key
 TELEGRAM_BOT_TOKEN=your_telegram_token
-WEBHOOK_ENDPOINT=https://your-ngrok-url.ngrok.io/api/webhook/nodit
 ```
 
 ## 📚 **Documentation**
 
 - **[Web App Guide](webapp/README.md)**: Complete web app documentation
-- **[API Reference](webapp/backend/README.md)**: Backend API documentation
-- **[Monitoring Guide](webapp/backend/WEBHOOK_MONITORING.md)**: Real-time monitoring setup
-- **[Telegram Bot Guide](TelegramBot/README.md)**: Bot usage guide
 
 ## 🔧 **Monitoring API Endpoints**
 
