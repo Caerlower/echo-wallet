@@ -1,9 +1,19 @@
-# 🤖 EchoWallet - AI-Powered Blockchain Assistant
+# 🤖 EchoWallet - AI-Powered Blockchain Assistant with Real-Time Monitoring
 
-EchoWallet is a comprehensive blockchain wallet assistant that provides detailed insights into wallets on the **Base blockchain**. It's available as both a **Telegram Bot** and a **Modern Web App**.
+EchoWallet is a comprehensive blockchain wallet assistant that provides detailed insights into wallets on the **Base blockchain** with **real-time transaction monitoring and alerts**. It's available as both a **Telegram Bot** and a **Modern Web App**.
 
 ![image](https://github.com/user-attachments/assets/85777b0b-0266-482f-8c79-ad04c8b00986)
 <img width="937" alt="Screenshot 2025-06-22 at 4 04 56 PM" src="https://github.com/user-attachments/assets/ad7de994-8db4-4702-b832-b1f2abd84580" />
+
+## 🚨 **NEW: Real-Time Transaction Monitoring**
+
+EchoWallet now features **instant transaction monitoring** with Telegram alerts:
+
+- ⚡ **Real-time webhook-based monitoring** (no polling delays)
+- 🔔 **Instant Telegram notifications** for new transactions
+- 🎯 **Customizable alerts** (amount thresholds, token types, transaction types)
+- 📊 **Smart filtering** (incoming/outgoing, specific tokens, minimum amounts)
+- 🔄 **Automatic monitoring** (starts immediately, runs continuously)
 
 ## 📱 **Two Ways to Use EchoWallet**
 
@@ -11,6 +21,7 @@ EchoWallet is a comprehensive blockchain wallet assistant that provides detailed
 - **Modern chat-based interface**
 - **Wallet connection support**
 - **Real-time portfolio tracking**
+- **Transaction monitoring dashboard**
 - **Beautiful, responsive UI**
 - **AI-powered insights**
 
@@ -19,10 +30,11 @@ EchoWallet is a comprehensive blockchain wallet assistant that provides detailed
 - **Quick wallet analysis**
 - **Portfolio overview**
 - **Transaction history**
+- **Real-time monitoring alerts**
 
 ## 🚀 **Quick Start**
 
-### **Web App** (New!)
+### **Web App** (Recommended)
 ```bash
 # Navigate to web app
 cd webapp
@@ -34,6 +46,23 @@ cd backend && npm install && npm run dev
 cd frontend && npm install && npm run dev
 
 # Open http://localhost:3000
+```
+
+### **Real-Time Monitoring Setup**
+```bash
+# 1. Install ngrok for webhook endpoint
+npm install -g ngrok
+
+# 2. Start ngrok to expose your local server
+ngrok http 3001
+
+# 3. Update your .env file with the ngrok URL
+WEBHOOK_ENDPOINT=https://your-ngrok-url.ngrok.io/api/webhook/nodit
+
+# 4. Start monitoring a wallet
+curl -X POST "http://localhost:3001/api/webhook-monitoring/start/0xYOUR_WALLET_ADDRESS" \
+  -H "Content-Type: application/json" \
+  -d '{"chatId": "YOUR_TELEGRAM_CHAT_ID", "alerts": [{"type": "incoming_funds", "token": "USDC", "amount": "0.1"}]}'
 ```
 
 ### **Telegram Bot** (Legacy)
@@ -62,6 +91,14 @@ npm start
 - **Real-time Data**: Live blockchain data via Nodit APIs
 - **Search Functionality**: Find specific transactions
 
+### 🚨 **Real-Time Monitoring** (NEW!)
+- **Webhook-Based Alerts**: Instant transaction notifications
+- **Custom Alert Rules**: Amount thresholds, token types, transaction directions
+- **Telegram Integration**: Direct notifications to your chat
+- **Smart Filtering**: Only relevant transactions trigger alerts
+- **Automatic Setup**: Easy webhook configuration
+- **Multiple Wallets**: Monitor multiple addresses simultaneously
+
 ### 🤖 **AI Integration**
 - **Perplexity AI**: Human-readable wallet analysis
 - **Pattern Recognition**: Activity patterns and risk assessment
@@ -70,6 +107,7 @@ npm start
 
 ### 🔗 **Blockchain Integration**
 - **Nodit APIs**: Comprehensive blockchain data
+- **Nodit Webhooks**: Real-time transaction notifications
 - **Base Chain**: Full Base mainnet support
 - **Multi-Token**: ETH and ERC-20 tokens
 - **ENS Support**: Ethereum Name Service
@@ -81,10 +119,19 @@ npm start
 webapp/
 ├── backend/          # Express.js API server
 │   ├── routes/       # API endpoints
+│   │   ├── webhook.js              # Webhook receiver
+│   │   ├── webhook-monitoring.js   # Monitoring management
+│   │   ├── monitoring.js           # Legacy polling system
+│   │   └── ...
 │   ├── services/     # Business logic
+│   │   ├── webhook-monitoring.js   # Real-time monitoring
+│   │   ├── monitoring.js           # Legacy polling
+│   │   └── ...
 │   └── server.js     # Main server
 └── frontend/         # Next.js React app
     ├── components/   # React components
+    │   ├── MonitoringPanel.js      # Monitoring dashboard
+    │   └── ...
     ├── pages/        # Next.js pages
     └── styles/       # CSS and styling
 ```
@@ -101,6 +148,7 @@ TelegramBot/
 
 ### **Primary APIs**
 - **Nodit Data API**: Portfolio and transaction data
+- **Nodit Webhook API**: Real-time transaction notifications
 - **Nodit Node RPC**: Direct blockchain interactions
 - **Perplexity AI**: Intelligent analysis
 - **ENS**: Address resolution
@@ -115,17 +163,19 @@ TelegramBot/
 
 ### **For Users**
 - **Portfolio Overview**: Total value and asset breakdown
-- **Transaction Monitoring**: Recent activity tracking
+- **Transaction Monitoring**: Real-time activity tracking with alerts
 - **AI Insights**: Intelligent wallet analysis
 - **Search Capabilities**: Find specific transactions
 - **ENS Support**: Easy address resolution
+- **Custom Alerts**: Personalized notification rules
 
 ### **For Developers**
 - **Clean Architecture**: Modular, maintainable code
 - **API-First Design**: RESTful endpoints
-- **Real-time Features**: WebSocket support
+- **Real-time Features**: WebSocket and webhook support
 - **Modern Stack**: React, Next.js, Express
 - **Comprehensive Documentation**: Detailed guides
+- **Webhook System**: Scalable real-time monitoring
 
 ## 🎨 **User Experience**
 
@@ -135,12 +185,14 @@ TelegramBot/
 - **Real-time**: Live data updates
 - **Interactive**: Chat-based interface
 - **Wallet Connect**: Easy wallet integration
+- **Monitoring Dashboard**: Real-time alert management
 
 ### **Telegram Bot Features**
 - **Simple Commands**: Easy to use
 - **Quick Responses**: Fast data retrieval
 - **Portable**: Works anywhere Telegram is available
 - **No Installation**: Just start chatting
+- **Real-time Alerts**: Instant transaction notifications
 
 ## 🔒 **Security & Privacy**
 
@@ -149,6 +201,7 @@ TelegramBot/
 - **CORS Protection**: Secure cross-origin requests
 - **Error Handling**: Graceful failure management
 - **Data Privacy**: Minimal data collection
+- **Webhook Security**: Validated webhook endpoints
 
 ## 🚀 **Getting Started**
 
@@ -156,6 +209,7 @@ TelegramBot/
 - Node.js 18+
 - Nodit API key
 - Perplexity AI key (optional)
+- Telegram Bot token (for monitoring alerts)
 - MetaMask or compatible wallet (for web app)
 
 ### **Environment Setup**
@@ -166,13 +220,51 @@ NODIT_API_KEY=your_nodit_api_key
 # Optional
 PERPLEXITY_API_KEY=your_perplexity_key
 TELEGRAM_BOT_TOKEN=your_telegram_token
+WEBHOOK_ENDPOINT=https://your-ngrok-url.ngrok.io/api/webhook/nodit
 ```
 
 ## 📚 **Documentation**
 
 - **[Web App Guide](webapp/README.md)**: Complete web app documentation
 - **[API Reference](webapp/backend/README.md)**: Backend API documentation
+- **[Monitoring Guide](webapp/backend/WEBHOOK_MONITORING.md)**: Real-time monitoring setup
 - **[Telegram Bot Guide](TelegramBot/README.md)**: Bot usage guide
+
+## 🔧 **Monitoring API Endpoints**
+
+### **Start Monitoring**
+```bash
+POST /api/webhook-monitoring/start/:address
+{
+  "chatId": "YOUR_TELEGRAM_CHAT_ID",
+  "alerts": [
+    {
+      "type": "incoming_funds",
+      "token": "USDC",
+      "amount": "0.1"
+    }
+  ]
+}
+```
+
+### **Stop Monitoring**
+```bash
+POST /api/webhook-monitoring/stop/:address
+```
+
+### **Check Status**
+```bash
+GET /api/webhook-monitoring/status/:address
+```
+
+### **Test Notification**
+```bash
+POST /api/webhook-monitoring/test-notification
+{
+  "chatId": "YOUR_TELEGRAM_CHAT_ID",
+  "message": "Test message"
+}
+```
 
 ## 🤝 **Contributing**
 
@@ -195,6 +287,9 @@ This project is licensed under the ISC License.
 ## 🔮 **Roadmap**
 
 ### **Web App Enhancements**
+- [x] Real-time transaction monitoring
+- [x] Webhook-based alerts
+- [x] Telegram integration
 - [ ] WalletConnect v2 integration
 - [ ] Mobile app version
 - [ ] Advanced analytics dashboard
@@ -202,6 +297,7 @@ This project is licensed under the ISC License.
 - [ ] NFT tracking
 
 ### **Bot Improvements**
+- [x] Real-time monitoring alerts
 - [ ] More commands
 - [ ] Enhanced AI responses
 - [ ] Group chat support
@@ -211,4 +307,4 @@ This project is licensed under the ISC License.
 
 **Built with ❤️ for the Base ecosystem**
 
-*Choose your preferred interface and start exploring your wallet data with AI-powered insights!*
+*Choose your preferred interface and start exploring your wallet data with AI-powered insights and real-time monitoring!*
