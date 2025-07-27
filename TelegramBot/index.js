@@ -4,6 +4,9 @@ const nodit = require('../services/nodit');
 const { resolveENS } = require('../services/ens');
 const perplexity = require('../services/perplexity');
 
+// Import monitoring service
+const monitoring = require('../webapp/backend/services/monitoring');
+
 // Validate environment variables
 const requiredEnvVars = ['TELEGRAM_TOKEN', 'NODIT_API_KEY'];
 for (const envVar of requiredEnvVars) {
@@ -98,6 +101,10 @@ bot.onText(/\/help/, (msg) => {
 
 *Commands:*
 /start - Welcome message
+/monitor - Start monitoring a wallet
+/stop_monitor - Stop monitoring a wallet
+/alerts - Manage wallet alerts
+/test_notification - Test notification
 /help - Show this help
 /status - Check bot status
 
@@ -118,6 +125,110 @@ bot.onText(/\/help/, (msg) => {
     parse_mode: 'Markdown',
     disable_web_page_preview: true
   });
+});
+
+// Monitor wallet command
+bot.onText(/\/monitor (.+)/, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const walletAddress = match[1].trim();
+  
+  try {
+    // Resolve ENS if needed
+    let resolvedAddress = walletAddress;
+    if (walletAddress.endsWith('.eth')) {
+      const ensResult = await resolveENS(walletAddress);
+      if (!ensResult.success) {
+        return bot.sendMessage(chatId, `❌ Failed to resolve ENS name: ${walletAddress}`);
+      }
+      resolvedAddress = ensResult.address;
+    }
+    
+    // Validate address
+    if (!isValidWallet(resolvedAddress)) {
+      return bot.sendMessage(chatId, '❌ Invalid wallet address format');
+    }
+    
+    // Start monitoring
+    monitoring.addWalletToMonitoring(resolvedAddress, chatId);
+    
+    const message = `✅ *Wallet Monitoring Started!*\n\nWallet: \`${resolvedAddress}\`\n\n🔔 You'll now receive notifications for:\n• New transactions\n• Custom alerts (when set)\n\nUse /alerts to set up custom notifications!`;
+    
+    bot.sendMessage(chatId, message, {
+      parse_mode: 'Markdown',
+      disable_web_page_preview: true
+    });
+    
+  } catch (error) {
+    console.error('Error starting monitoring:', error);
+    bot.sendMessage(chatId, '❌ Failed to start monitoring. Please try again.');
+  }
+});
+
+// Stop monitoring command
+bot.onText(/\/stop_monitor (.+)/, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const walletAddress = match[1].trim();
+  
+  try {
+    // Resolve ENS if needed
+    let resolvedAddress = walletAddress;
+    if (walletAddress.endsWith('.eth')) {
+      const ensResult = await resolveENS(walletAddress);
+      if (!ensResult.success) {
+        return bot.sendMessage(chatId, `❌ Failed to resolve ENS name: ${walletAddress}`);
+      }
+      resolvedAddress = ensResult.address;
+    }
+    
+    // Validate address
+    if (!isValidWallet(resolvedAddress)) {
+      return bot.sendMessage(chatId, '❌ Invalid wallet address format');
+    }
+    
+    // Stop monitoring
+    monitoring.removeWalletFromMonitoring(resolvedAddress);
+    
+    const message = `🛑 *Wallet Monitoring Stopped!*\n\nWallet: \`${resolvedAddress}\`\n\nYou'll no longer receive notifications for this wallet.`;
+    
+    bot.sendMessage(chatId, message, {
+      parse_mode: 'Markdown',
+      disable_web_page_preview: true
+    });
+    
+  } catch (error) {
+    console.error('Error stopping monitoring:', error);
+    bot.sendMessage(chatId, '❌ Failed to stop monitoring. Please try again.');
+  }
+});
+
+// Alerts command
+bot.onText(/\/alerts/, async (msg) => {
+  const chatId = msg.chat.id;
+  
+  const monitoredWallets = monitoring.getAllMonitoredWallets().filter(w => w.chatId === chatId);
+  const walletList = monitoredWallets.length > 0 
+    ? monitoredWallets.map(w => `• \`${w.address}\` (${w.alerts.length} alerts)`).join('\n')
+    : 'None';
+    
+  const message = `🔔 *Wallet Alerts Management*\n\n*Available Alert Types:*\n• \`incoming_funds\` - Notify when receiving funds\n• \`outgoing_funds\` - Notify when sending funds\n• \`nft_received\` - Notify when receiving NFTs\n• \`custom_amount\` - Notify for any transaction above amount\n\n*How to set alerts:*\n1. Start monitoring a wallet: \`/monitor 0x...\`\n2. Set alerts via the website interface\n3. Or use the API directly\n\n*Current monitored wallets:*\n${walletList}`;
+  
+  bot.sendMessage(chatId, message, {
+    parse_mode: 'Markdown',
+    disable_web_page_preview: true
+  });
+});
+
+// Test notification command
+bot.onText(/\/test_notification/, async (msg) => {
+  const chatId = msg.chat.id;
+  
+  try {
+    await monitoring.sendTestNotification(chatId, '🧪 Test notification from EchoWallet bot! Your monitoring setup is working correctly.');
+    bot.sendMessage(chatId, '✅ Test notification sent successfully!');
+  } catch (error) {
+    console.error('Error sending test notification:', error);
+    bot.sendMessage(chatId, '❌ Failed to send test notification. Please check your bot configuration.');
+  }
 });
 
 bot.onText(/\/status/, (msg) => {

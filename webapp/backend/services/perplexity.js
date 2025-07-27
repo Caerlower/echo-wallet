@@ -12,6 +12,9 @@ class PerplexityService {
   }
 
   async queryWallet(walletAddress, transactions, portfolio) {
+    console.log('[PERPLEXITY] Starting wallet analysis...');
+    console.log('[PERPLEXITY] API Key configured:', !!this.apiKey);
+    
     if (!this.apiKey) {
       throw new Error('Perplexity API key not configured');
     }
@@ -32,15 +35,31 @@ Analyze the following Base chain wallet activity and provide insights.
 **Recent Transactions:**
 ${transactionSummary}
 
-Please provide the following, using bolding for titles (e.g., *Summary*) and bullet points for lists (using '-'):
-1.  *Summary:* A brief overview of the wallet's recent activity.
-2.  *Patterns:* Any notable patterns or trends (e.g., frequent trades, stablecoin usage).
-3.  *Risk Assessment:* Note any suspicious activity or risks. If none, say so.
-4.  *Suggestions:* Actionable suggestions for the user.
+Please provide a comprehensive analysis with the following structure:
 
-Keep the response concise and friendly. Use emojis to make it engaging, but do not use any other markdown formatting like headers (#).`;
+## Summary
+- Brief overview of the wallet's current state and recent activity
+- Key metrics and notable changes
+
+## Patterns
+- Transaction patterns and trends
+- Asset usage patterns
+- Behavioral insights
+
+## Risk Assessment
+- Any suspicious or risky activity
+- Security considerations
+- If no risks found, state "No significant risks detected"
+
+## Suggestions
+- Actionable recommendations
+- Optimization opportunities
+- Best practices
+
+Keep the response concise, friendly, and well-structured. Use emojis appropriately to make it engaging. Format with proper markdown headers (##) and bullet points (-).`;
+      console.log('[PERPLEXITY] Making API request...');
       const response = await axios.post(`${this.baseURL}/chat/completions`, {
-        model: 'llama-3.1-sonar-small-128k-online',
+        model: 'sonar-pro',
         messages: [
           { role: 'system', content: 'You are EchoWallet, a helpful AI assistant for Base blockchain wallet analysis. Provide clear, concise insights about wallet activity. Be friendly and use emojis appropriately.' },
           { role: 'user', content: prompt }
@@ -51,6 +70,7 @@ Keep the response concise and friendly. Use emojis to make it engaging, but do n
         headers: this.headers,
         timeout: 30000
       });
+      console.log('[PERPLEXITY] API response received');
       if (response.data.choices && response.data.choices[0]) {
         return response.data.choices[0].message.content;
       } else {
@@ -59,13 +79,13 @@ Keep the response concise and friendly. Use emojis to make it engaging, but do n
     } catch (error) {
       console.error('[PERPLEXITY API ERROR]', error.response?.data || error.message);
       if (error.response?.status === 401) {
-        throw new Error('Perplexity API key is invalid');
+        throw new Error('Perplexity API key is invalid or not configured. Please check your .env file and ensure you have a valid API key from https://www.perplexity.ai/settings/api');
       } else if (error.response?.status === 429) {
-        throw new Error('Perplexity API rate limit exceeded');
+        throw new Error('Perplexity API rate limit exceeded. Please try again later.');
       } else if (error.code === 'ECONNABORTED') {
-        throw new Error('Perplexity API request timeout');
+        throw new Error('Perplexity API request timeout. Please check your internet connection and try again.');
       } else {
-        throw new Error('AI analysis temporarily unavailable');
+        throw new Error('AI analysis temporarily unavailable. Please check your API key and try again.');
       }
     }
   }
@@ -75,7 +95,7 @@ Keep the response concise and friendly. Use emojis to make it engaging, but do n
     try {
       const prompt = `Explain this blockchain transaction in simple terms:\n\nTransaction Hash: ${transaction.hash}\nType: ${transaction.type}\nDirection: ${transaction.direction}\nAmount: ${transaction.value} ${transaction.tokenSymbol}\nFrom: ${transaction.from}\nTo: ${transaction.to}\nTimestamp: ${transaction.timestamp}\n\nPlease provide:\n1. What happened in this transaction\n2. What it means for the wallet owner\n3. Any important details to note\n\nKeep it simple and user-friendly. Use emojis to make it engaging.`;
       const response = await axios.post(`${this.baseURL}/chat/completions`, {
-        model: 'llama-3.1-sonar-small-128k-online',
+        model: 'sonar-pro',
         messages: [
           { role: 'system', content: 'You are a helpful blockchain transaction explainer. Make complex transactions easy to understand for non-technical users.' },
           { role: 'user', content: prompt }
@@ -104,10 +124,18 @@ Keep the response concise and friendly. Use emojis to make it engaging, but do n
     try {
       let prompt = question;
       if (walletContext) {
-        prompt = `Context: User is asking about their Base chain wallet activity.\nWallet Address: ${walletContext.address}\nCurrent Balance: ${walletContext.balance} ETH\n\nUser Question: ${question}\n\nPlease provide a helpful answer related to their wallet and Base chain. If the question is not wallet-related, provide a general helpful response.`;
+        prompt = `Context: User is asking about their Base chain wallet activity.
+Wallet Address: ${walletContext.address}
+Current Balance: ${walletContext.balance} ETH
+
+User Question: ${question}
+
+Please provide a helpful, well-structured answer. If the question is wallet-related, focus on their specific wallet and Base chain context. If not wallet-related, provide a general helpful response about blockchain topics.
+
+Format your response with proper markdown structure, using headers (##) and bullet points (-) where appropriate. Keep it friendly and informative.`;
       }
       const response = await axios.post(`${this.baseURL}/chat/completions`, {
-        model: 'llama-3.1-sonar-small-128k-online',
+        model: 'sonar-pro',
         messages: [
           { role: 'system', content: 'You are EchoWallet, a helpful AI assistant for Base blockchain. Answer questions about wallets, transactions, and blockchain topics. Be friendly and informative.' },
           { role: 'user', content: prompt }
@@ -148,16 +176,31 @@ Analyze this Base chain portfolio and provide insights:
 **Assets:**
 ${assetSummary}
 
-Please provide:
-1. *Portfolio Overview:* Brief summary of the portfolio composition
-2. *Asset Analysis:* Key observations about the assets held
-3. *Diversification:* Assessment of portfolio diversification
-4. *Recommendations:* Suggestions for portfolio optimization
+Please provide a comprehensive portfolio analysis with the following structure:
 
-Keep it friendly and actionable. Use emojis appropriately.`;
+## Portfolio Overview
+- Summary of portfolio composition and value distribution
+- Key metrics and performance indicators
+
+## Asset Analysis
+- Detailed analysis of major holdings
+- Asset allocation insights
+- Token performance observations
+
+## Diversification Assessment
+- Portfolio diversification analysis
+- Risk distribution evaluation
+- Concentration concerns (if any)
+
+## Recommendations
+- Optimization suggestions
+- Risk management advice
+- Strategic recommendations
+
+Keep the analysis friendly, actionable, and well-structured. Use emojis appropriately and format with proper markdown headers (##) and bullet points (-).`;
 
       const response = await axios.post(`${this.baseURL}/chat/completions`, {
-        model: 'llama-3.1-sonar-small-128k-online',
+        model: 'sonar-pro',
         messages: [
           { role: 'system', content: 'You are EchoWallet, a helpful AI assistant for Base blockchain portfolio analysis. Provide clear, actionable insights about portfolio composition and optimization.' },
           { role: 'user', content: prompt }

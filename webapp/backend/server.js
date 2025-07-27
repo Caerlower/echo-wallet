@@ -44,6 +44,30 @@ try {
   aiRoutes = express.Router();
 }
 
+try {
+  monitoringRoutes = require('./routes/monitoring');
+  console.log('✅ Monitoring routes loaded successfully');
+} catch (error) {
+  console.error('❌ Error loading monitoring routes:', error.message);
+  monitoringRoutes = express.Router();
+}
+
+try {
+  webhookRoutes = require('./routes/webhook');
+  console.log('✅ Webhook routes loaded successfully');
+} catch (error) {
+  console.error('❌ Error loading webhook routes:', error.message);
+  webhookRoutes = express.Router();
+}
+
+try {
+  webhookMonitoringRoutes = require('./routes/webhook-monitoring');
+  console.log('✅ Webhook monitoring routes loaded successfully');
+} catch (error) {
+  console.error('❌ Error loading webhook monitoring routes:', error.message);
+  webhookMonitoringRoutes = express.Router();
+}
+
 const noditProxyRoutes = require('./routes/nodit');
 
 // Middleware
@@ -80,6 +104,9 @@ app.get('/health', (req, res) => {
 app.use('/api/wallet', walletRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/monitoring', monitoringRoutes);
+app.use('/api/webhook', webhookRoutes);
+app.use('/api/webhook-monitoring', webhookMonitoringRoutes);
 app.use('/api/nodit', noditProxyRoutes);
 
 // Socket.IO connection handling

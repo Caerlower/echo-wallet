@@ -131,7 +131,7 @@ class NoditService {
       let portfolio = [];
       // 1. Get native ETH balance
       const ethBalance = await this.getWalletBalance(address);
-      if (ethBalance > 0.000001) {
+      if (ethBalance > 0) { // Show any ETH balance, even very small amounts
         portfolio.push({
           contractAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
           name: 'Ethereum',
@@ -142,18 +142,35 @@ class NoditService {
       }
       // 2. Use Nodit Data API for token discovery
       try {
-        const tokensResponse = await Promise.race([
-          this._callDataApi('/token/getTokensOwnedByAccount', {
-            accountAddress: address,
-            rpp: 100, // Get up to 100 tokens
-            page: 1
-          }),
-          new Promise((_, reject) => setTimeout(() => reject(new Error('Nodit API timeout')), 15000))
-        ]);
-        if (tokensResponse && tokensResponse.items && tokensResponse.items.length > 0) {
-          tokensResponse.items.forEach(token => {
+        let allTokens = [];
+        let page = 1;
+        let hasMore = true;
+        
+        // Fetch all tokens across multiple pages
+        while (hasMore && page <= 5) { // Limit to 5 pages to prevent infinite loops
+          const tokensResponse = await Promise.race([
+            this._callDataApi('/token/getTokensOwnedByAccount', {
+              accountAddress: address,
+              rpp: 100,
+              page: page
+            }),
+            new Promise((_, reject) => setTimeout(() => reject(new Error('Nodit API timeout')), 15000))
+          ]);
+          
+          if (tokensResponse && tokensResponse.items && tokensResponse.items.length > 0) {
+            allTokens = allTokens.concat(tokensResponse.items);
+            hasMore = tokensResponse.items.length === 100; // If we got less than 100, we've reached the end
+            page++;
+          } else {
+            hasMore = false;
+          }
+        }
+        
+        // Process all found tokens
+        if (allTokens.length > 0) {
+          allTokens.forEach(token => {
             const balance = parseFloat(this.web3.utils.fromWei(token.balance, token.contract.decimals));
-            if (balance > 0.000001) {
+            if (balance > 0) { // Show any token balance, even very small amounts
               portfolio.push({
                 contractAddress: token.contract.address,
                 name: token.contract.name || 'Unknown Token',
@@ -166,7 +183,8 @@ class NoditService {
           });
         }
       } catch (noditError) {
-        // Do not fallback to common tokens. Only return what was found or nothing.
+        console.error('[getPortfolio] Nodit API error:', noditError.message);
+        // Continue with what we have (ETH balance)
       }
       // 3. Get prices for all tokens
       if (portfolio.length > 0) {
@@ -178,8 +196,13 @@ class NoditService {
           token.price = price;
           token.value = token.balance * price;
         });
-        // Filter out tokens with no price or value
-        portfolio = portfolio.filter(token => token.price > 0 && token.value > 0);
+        // Keep all tokens, even those without price data (show value as 0)
+        portfolio.forEach(token => {
+          if (!token.price || token.price === 0) {
+            token.price = 0;
+            token.value = 0;
+          }
+        });
         // Sort by USD value (highest first)
         portfolio.sort((a, b) => (b.value || 0) - (a.value || 0));
         // Calculate total portfolio value
